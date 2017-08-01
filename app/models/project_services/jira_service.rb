@@ -104,7 +104,7 @@ class JiraService < IssueTrackerService
   def close_issue(entity, external_issue)
     issue = jira_request { client.Issue.find(external_issue.iid) }
 
-    return if issue.nil? || issue.resolution.present? || !jira_issue_transition_id.present?
+    return if issue.nil? || (issue.respond_to(:resolution) && issue.resolution.present?) || !jira_issue_transition_id.present?
 
     commit_id = if entity.is_a?(Commit)
                   entity.id
